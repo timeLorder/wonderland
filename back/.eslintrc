@@ -1,0 +1,5 @@
+{
+  "extends": "eslint-config-egg",
+  // add your custom rules here
+  "rules": {}
+}
