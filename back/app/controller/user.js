@@ -41,10 +41,11 @@ class UserController extends BaseController {
     } else {
       // 用户名不存在 注册逻辑
       // to do 注册前置校验
-      await ctx.model.User.create({
+      const newUser = await ctx.model.User.create({
         username,
         password: md5(password + pwdSalt),
       });
+      console.log(newUser);
       this.success({ data: { message: '注册成功' } });
     }
   }
