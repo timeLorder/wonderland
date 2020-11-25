@@ -2,6 +2,8 @@
 
 'use strict';
 
+const onerror = require('../app/handler/error');
+
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
@@ -57,6 +59,7 @@ module.exports = appInfo => {
   return {
     ...config,
     ...userConfig,
+    onerror,
     mongoose,
     security,
     jwt,
