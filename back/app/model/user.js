@@ -7,7 +7,7 @@ module.exports = app => {
   const UserSchema = new Schema(
     {
       username: { type: String, required: true },
-      password: { type: String, required: false },
+      password: { type: String, required: false, select: false },
       avatar: { type: String, required: false },
     },
     { timestamps: true }
