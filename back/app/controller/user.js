@@ -70,6 +70,7 @@ class UserController extends BaseController {
     } = this;
 
     try {
+      // to do 撤销token有效性
       ctx.cookies.set(jwtTokenKey, null, { maxAge: 0 });
       this.success();
     } catch (error) {
