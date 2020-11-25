@@ -1,10 +1,10 @@
 'use strict';
 
-const ms = require('ms');
 const Service = require('egg').Service;
+const ms = require('ms');
 
 class UserService extends Service {
-  async signToken(payload, options) {
+  async signToken(payload, options = {}) {
     const {
       app,
       ctx,

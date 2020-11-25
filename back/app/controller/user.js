@@ -1,7 +1,6 @@
 'use strict';
 
 const md5 = require('md5');
-const ms = require('ms');
 const BaseController = require('./base');
 const ERRORS = require('../constant/error');
 
@@ -9,13 +8,8 @@ class UserController extends BaseController {
   // 账密登录/注册
   async onboard() {
     const {
-      app,
       ctx,
-      config: {
-        pwdSalt,
-        jwtTokenKey,
-        jwt: { secret: jwtSecret },
-      },
+      config: { pwdSalt },
     } = this;
     const { username, password } = ctx.request.body;
     const existantUser = await ctx.model.User.findOne({ username });
@@ -23,17 +17,7 @@ class UserController extends BaseController {
       // 用户名已存在 登录逻辑
       if (existantUser.password === md5(password + pwdSalt)) {
         const { _id } = existantUser;
-        const token = app.jwt.sign(
-          {
-            _id,
-          },
-          jwtSecret,
-          {
-            expiresIn: '1d',
-          }
-        );
-
-        ctx.cookies.set(jwtTokenKey, token, { maxAge: ms('10y') });
+        ctx.service.user.signToken({ _id });
         this.success({ data: { message: '登录成功' } });
       } else {
         this.error({ error: ERRORS.PWD_ERROR });
@@ -45,7 +29,7 @@ class UserController extends BaseController {
         username,
         password: md5(password + pwdSalt),
       });
-      console.log(newUser);
+      ctx.service.user.signToken({ _id: newUser._id });
       this.success({ data: { message: '注册成功' } });
     }
   }
