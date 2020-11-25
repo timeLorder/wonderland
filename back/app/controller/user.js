@@ -9,15 +9,20 @@ class UserController extends BaseController {
   async onboard() {
     const {
       ctx,
-      config: { pwdSalt },
+      config: { pwdSalt, defaultAvatar },
     } = this;
     const { username, password } = ctx.request.body;
-    const existantUser = await ctx.model.User.findOne({ username });
+    const existantUser = await ctx.model.User.findOne({ username }, [
+      '_id',
+      'username',
+      'password',
+      'avatar',
+    ]);
     if (existantUser) {
       // 用户名已存在 登录逻辑
       if (existantUser.password === md5(password + pwdSalt)) {
-        const { _id } = existantUser;
-        ctx.service.user.signToken({ _id });
+        const { _id, avatar } = existantUser;
+        ctx.service.user.signToken({ _id, username, avatar });
         this.success({ data: { message: '登录成功' } });
       } else {
         this.error({ error: ERRORS.PWD_ERROR });
@@ -29,7 +34,7 @@ class UserController extends BaseController {
         username,
         password: md5(password + pwdSalt),
       });
-      ctx.service.user.signToken({ _id: newUser._id });
+      ctx.service.user.signToken({ _id: newUser._id, username, avatar: defaultAvatar });
       this.success({ data: { message: '注册成功' } });
     }
   }
@@ -41,17 +46,15 @@ class UserController extends BaseController {
       ctx,
       config: {
         jwtTokenKey,
-        defaultAvatar,
         jwt: { secret: jwtSecret },
       },
     } = this;
     const token = ctx.cookies.get(jwtTokenKey);
 
     try {
-      const user = await app.jwt.verify(token, jwtSecret);
+      const { username, avatar } = await app.jwt.verify(token, jwtSecret);
       // 用户已登录
-      // 查询头像或其他基本信息后返回
-      const { username, avatar = defaultAvatar } = await ctx.model.User.findById(user._id);
+      // 从Token中获取头像和其他基本信息后返回
       this.success({ data: { isLogin: true, username, avatar } });
     } catch (error) {
       // 令牌校验失败 返回未登录
