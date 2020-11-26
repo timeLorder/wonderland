@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Header />
+    <wd-header />
     <Nuxt />
-    <Footer />
+    <wd-footer />
   </div>
 </template>

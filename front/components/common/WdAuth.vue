@@ -1,66 +1,70 @@
 <template>
-  <a-modal
-    v-model="visible"
-    dialog-class="wd-auth-modal"
-    title="账密登录 / 注册"
-    :footer="null"
-    :mask-closable="false"
-  >
-    <a-form-model
-      ref="wd-auth-form"
-      layout="vertical"
-      :model="formData"
-      :rules="formRules"
-      hide-required-mark
-      @submit="handleSubmit"
-      @submit.native.prevent
+  <div>
+    <wd-avatar v-if="isLogin" />
+    <a-button v-else class="active-button" @click="handleLogin">登录</a-button>
+    <a-modal
+      v-model="visible"
+      dialog-class="wd-auth-modal"
+      title="账密登录 / 注册"
+      :footer="null"
+      :mask-closable="false"
     >
-      <a-form-model-item prop="username">
-        <a-input v-model="formData.username" size="large" placeholder="用户名">
-          <a-icon slot="addonBefore" type="user" />
-        </a-input>
-      </a-form-model-item>
-      <a-form-model-item prop="password" :help="passwordHelp" :validate-status="passwordStatus">
-        <a-input-password v-model="formData.password" size="large" placeholder="密码">
-          <a-icon slot="addonBefore" type="lock" />
-        </a-input-password>
-      </a-form-model-item>
-      <a-form-model-item>
-        <a-button
-          class="active-button"
-          type="primary"
-          size="large"
-          html-type="submit"
-          block
-          :loading="loading"
-        >
-          登录 / 注册
-        </a-button>
-      </a-form-model-item>
-    </a-form-model>
-    <a-divider>第三方登录</a-divider>
-    <a-row>
-      <a-col class="wd-auth-third-col" :span="8" :offset="4">
-        <a-button class="active-button" shape="circle" size="large" title="通过github登录">
-          <a-icon type="github" />
-        </a-button>
-      </a-col>
-      <a-col class="wd-auth-third-col" :span="8">
-        <a-button class="active-button" shape="circle" size="large" title="通过微信登录">
-          <a-icon type="wechat" />
-        </a-button>
-      </a-col>
-    </a-row>
-  </a-modal>
+      <a-form-model
+        ref="wd-auth-form"
+        layout="vertical"
+        :model="formData"
+        :rules="formRules"
+        hide-required-mark
+        @submit="handleSubmit"
+        @submit.native.prevent
+      >
+        <a-form-model-item prop="username">
+          <a-input v-model="formData.username" size="large" placeholder="用户名">
+            <a-icon slot="addonBefore" type="user" />
+          </a-input>
+        </a-form-model-item>
+        <a-form-model-item prop="password" :help="passwordHelp" :validate-status="passwordStatus">
+          <a-input-password v-model="formData.password" size="large" placeholder="密码">
+            <a-icon slot="addonBefore" type="lock" />
+          </a-input-password>
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-button
+            class="active-button"
+            type="primary"
+            size="large"
+            html-type="submit"
+            block
+            :loading="loading"
+          >
+            登录 / 注册
+          </a-button>
+        </a-form-model-item>
+      </a-form-model>
+      <a-divider>第三方登录</a-divider>
+      <a-row>
+        <a-col class="wd-auth-third-col" :span="8" :offset="4">
+          <a-button class="active-button" shape="circle" size="large" title="通过github登录">
+            <a-icon type="github" />
+          </a-button>
+        </a-col>
+        <a-col class="wd-auth-third-col" :span="8">
+          <a-button class="active-button" shape="circle" size="large" title="通过微信登录">
+            <a-icon type="wechat" />
+          </a-button>
+        </a-col>
+      </a-row>
+    </a-modal>
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Ref } from 'nuxt-property-decorator';
 import { FormModel, ValidationRule } from 'ant-design-vue/types/form-model/form';
-import { commonStore } from '@/store';
+import { commonStore, userStore } from '@/store';
 
 @Component
-export default class Auth extends Vue {
+export default class App extends Vue {
   @Ref('wd-auth-form') readonly authForm!: FormModel;
 
   passwordHelp = '';
@@ -105,6 +109,14 @@ export default class Auth extends Vue {
 
   set visible(v) {
     commonStore.setAuthModal(v);
+  }
+
+  get isLogin() {
+    return userStore.isLogin;
+  }
+
+  handleLogin() {
+    commonStore.openAuthModal();
   }
 
   async handleSubmit() {

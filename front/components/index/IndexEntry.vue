@@ -20,7 +20,7 @@ enum EntryType {
 }
 
 @Component
-export default class Entry extends Vue {
+export default class App extends Vue {
   @Prop({ type: String, required: true }) readonly type!: EntryType;
   @Prop({ type: String, required: true }) readonly title!: string;
 
