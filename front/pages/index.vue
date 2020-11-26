@@ -1,10 +1,10 @@
 <template>
   <main class="wd-entries-wrapper">
     <div class="wd-entries">
-      <Entry type="explore" title="探索一下" />
-      <Entry type="note" title="记录一下" />
-      <Entry type="focus" title="专注一下" />
-      <Entry type="relax" title="放松一下" />
+      <index-entry type="explore" title="探索一下" />
+      <index-entry type="note" title="记录一下" />
+      <index-entry type="focus" title="专注一下" />
+      <index-entry type="relax" title="放松一下" />
     </div>
   </main>
 </template>
