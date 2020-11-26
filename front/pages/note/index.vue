@@ -5,7 +5,10 @@
         <edit-status />
       </template>
       <template v-slot:right>
-        <a-space size="middle"><edit-action /><wd-auth /></a-space>
+        <a-space size="middle">
+          <edit-action />
+          <wd-auth />
+        </a-space>
       </template>
     </wd-header>
     <note-editor />
