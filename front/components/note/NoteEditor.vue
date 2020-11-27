@@ -1,10 +1,44 @@
 <template>
-  <div>Note Editor</div>
+  <tui-editor
+    ref="wd-tui-editor"
+    initial-edit-type="wysiwyg"
+    :options="finalOptions"
+    :height="height"
+    :preview-style="previewStyle"
+  />
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator';
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
 
-@Component
-export default class App extends Vue {}
+import { Editor } from '@toast-ui/vue-editor';
+import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator';
+import { MarkdownEditorOptions } from '@/constants/editor';
+
+type OptionsType = Partial<typeof MarkdownEditorOptions>;
+
+@Component({
+  components: {
+    TuiEditor: Editor,
+  },
+})
+export default class App extends Vue {
+  @Prop({ type: Object, default: () => ({}) }) readonly options!: OptionsType;
+  @Prop({ type: String, default: '300px' }) readonly height!: string;
+  @Prop({ type: String, default: 'vertical' }) readonly previewStyle!: 'vertical' | 'tab';
+
+  @Ref('wd-tui-editor') readonly editor!: Editor;
+
+  get finalOptions() {
+    return {
+      ...MarkdownEditorOptions,
+      ...this.options,
+    };
+  }
+
+  destroyed() {
+    this.editor.invoke('remove');
+  }
+}
 </script>
