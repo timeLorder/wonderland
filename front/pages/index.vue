@@ -2,7 +2,7 @@
   <main class="wd-entries-wrapper">
     <div class="wd-entries">
       <index-entry type="explore" title="探索一下" />
-      <index-entry type="note" title="记录一下" />
+      <index-entry type="note" title="记录一下" path="/note/edit" />
       <index-entry type="focus" title="专注一下" />
       <index-entry type="relax" title="放松一下" />
     </div>

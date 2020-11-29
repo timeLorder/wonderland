@@ -20,7 +20,7 @@ type OptionsType = Partial<typeof MarkdownEditorOptions>;
 
 @Component({
   components: {
-    TuiEditor: Editor,
+    TuiEditor: () => import('@toast-ui/vue-editor').then(res => res.Editor),
   },
 })
 export default class App extends Vue {
@@ -37,8 +37,13 @@ export default class App extends Vue {
     };
   }
 
-  destroyed() {
-    this.editor.invoke('remove');
+  getContent() {
+    const html = this.editor.invoke('getHtml');
+    const md = this.editor.invoke('getMarkdown');
+    return {
+      html,
+      md,
+    };
   }
 }
 </script>
