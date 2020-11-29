@@ -23,6 +23,7 @@ enum EntryType {
 export default class App extends Vue {
   @Prop({ type: String, required: true }) readonly type!: EntryType;
   @Prop({ type: String, required: true }) readonly title!: string;
+  @Prop({ type: String, default: '' }) readonly path!: string;
 
   private entryBg;
 
@@ -41,7 +42,8 @@ export default class App extends Vue {
   }
 
   jumpInto() {
-    this.$router.push(`/${this.type}`);
+    const to = this.path || `/${this.type}`;
+    this.$router.push(to);
   }
 }
 </script>
