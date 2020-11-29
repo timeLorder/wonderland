@@ -1,5 +1,5 @@
 <template>
-  <header class="wd-header">
+  <header class="wd-header" :class="headerClass">
     <wd-logo :clickable="clickable" />
     <slot name="center">
       <a-input-search
@@ -18,13 +18,27 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator';
+import { Vue, Component, Prop, Watch } from 'nuxt-property-decorator';
 
 @Component
 export default class App extends Vue {
+  @Prop({ type: Boolean, default: false }) readonly full!: boolean;
+
   private clickable = this.$route.path !== '/';
   private showSearch = this.$route.path !== '/';
   private searchText = '';
+
+  get headerClass() {
+    return {
+      'wd-header-full': this.full,
+    };
+  }
+
+  @Watch('$route')
+  onRouteChanged() {
+    this.clickable = this.$route.path !== '/';
+    this.showSearch = this.$route.path !== '/';
+  }
 }
 </script>
 
@@ -41,6 +55,11 @@ export default class App extends Vue {
   .wd-header-search {
     margin: 0 10px;
     width: 500px;
+  }
+
+  &.wd-header-full {
+    width: 100%;
+    padding: 12px 40px;
   }
 }
 </style>

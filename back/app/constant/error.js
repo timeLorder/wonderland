@@ -9,6 +9,10 @@ module.exports = {
     code: 'WD0001',
     message: '参数异常',
   },
+  UNAUTH_ERROR: {
+    code: 'WD0002',
+    message: '用户未登录',
+  },
   PWD_ERROR: {
     code: 'WD0011',
     message: '密码错误',

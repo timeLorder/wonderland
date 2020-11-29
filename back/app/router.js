@@ -9,4 +9,7 @@ module.exports = app => {
   router.get('/common/status', controller.user.getStatus);
   router.post('/common/onboard', controller.user.onboard);
   router.put('/private/logout', controller.user.logout);
+
+  router.post('/private/article/publish', controller.article.publish);
+  router.post('/private/article/save', controller.article.saveDraft);
 };

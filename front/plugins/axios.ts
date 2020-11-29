@@ -1,6 +1,5 @@
 import { Plugin } from '@nuxt/types';
 import { notification } from 'ant-design-vue';
-import { commonStore } from '@/store';
 import { initializeAxios } from '@/utils/axios-accessor';
 
 type ResponseType<T = any> = {
@@ -31,30 +30,32 @@ export class ResponseError extends Error {
 
 const defaultResponseData: ResponseType = { success: false };
 
-const axiosPlugin: Plugin = ({ $axios, redirect }) => {
+const axiosPlugin: Plugin = ({ $axios, redirect, store }) => {
   $axios.defaults.timeout = 5000;
 
   // let all status go to response .then
   $axios.defaults.validateStatus = () => true;
 
   $axios.onResponse<ResponseType<any>>(({ status, data = defaultResponseData, config }) => {
-    if (status === 401) {
-      // 未登录
-      if (process.server) {
-        redirect('/');
-      } else {
-        commonStore.openAuthModal();
-      }
-    } else if (status < 200 || status >= 300) {
+    if (status < 200 || status >= 300) {
       throw new ResponseError(data.errorMessage, data);
     } else if (!data.success) {
-      if (!config.disableNotify) {
-        notification.error({
-          message: '错误',
-          description: data.errorMessage || defaultMsg,
-        });
+      if (data.errorCode === 'WD0002') {
+        // 未登录
+        if (process.server) {
+          redirect('/');
+        } else {
+          store.dispatch('common/openAuthModal');
+        }
+      } else {
+        if (!config.disableNotify) {
+          notification.error({
+            message: '错误',
+            description: data.errorMessage || defaultMsg,
+          });
+        }
+        throw new ResponseError(data.errorMessage, data);
       }
-      throw new ResponseError(data.errorMessage, data);
     }
 
     return data;

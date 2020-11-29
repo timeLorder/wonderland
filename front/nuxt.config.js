@@ -39,6 +39,10 @@ export default {
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
 
+  router: {
+    middleware: 'auth',
+  },
+
   axios: {
     proxy: true,
     prefix: process.env.NODE_ENV === 'development' ? '/api' : '',
