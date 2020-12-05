@@ -37,7 +37,6 @@ export default class App extends Vue {
     this.isSubmiting = true;
     await this.$axios.post('/private/article/publish', data);
     this.isSubmiting = false;
-    // todo 路由权限控制
     // this.$router.push('/');
   }
 }
