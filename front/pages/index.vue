@@ -16,9 +16,6 @@ export default Vue.extend({});
 </script>
 
 <style lang="less">
-body {
-  background: @neumorphism-bg;
-}
 .wd-entries-wrapper {
   width: @index-width;
   margin: 40px auto;
