@@ -1,17 +1,15 @@
 'use strict';
 
 module.exports = app => {
-  const {
-    mongoose,
-    config: { defaultAvatar },
-  } = app;
+  const { mongoose } = app;
   const Schema = mongoose.Schema;
 
   const UserSchema = new Schema(
     {
+      __v: { type: Number, select: false },
       username: { type: String, required: true },
       password: { type: String, required: false, select: false },
-      avatar: { type: String, required: false, get: v => v || defaultAvatar },
+      avatar: { type: String, required: false },
     },
     { timestamps: true }
   );

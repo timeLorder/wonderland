@@ -25,7 +25,6 @@ module.exports = appInfo => {
     // use for password encryption, should change to your own and keep security
     pwdSalt: 'pwdSalt',
     jwtTokenKey: 'x-wd-token',
-    defaultAvatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
   };
 
   // 前后端分离时一般使用CORS校验Origin，此时可以关闭CSRF
