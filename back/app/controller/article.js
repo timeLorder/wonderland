@@ -24,8 +24,8 @@ class ArticleController extends BaseController {
     const { _id: articleId } = await ctx.model.Article.create({
       title,
       cover,
-      _article: md,
-      article: html,
+      _content: md,
+      content: html,
       author: _id,
     });
     this.success({ data: { id: articleId, message: '发布成功' } });
@@ -35,9 +35,11 @@ class ArticleController extends BaseController {
   async detail() {
     const { ctx } = this;
     const { id } = ctx.query;
-    const info = await ctx.model.Article.find({ _id: id })
-      .populate('author')
-      .update({ $inc: { readTimes: 1 } });
+    const info = await ctx.model.Article.findByIdAndUpdate(
+      id,
+      { $inc: { readTimes: 1 } },
+      { useFindAndModify: false }
+    ).populate('author', '-createdAt -updatedAt');
     this.success({ data: info });
   }
 }

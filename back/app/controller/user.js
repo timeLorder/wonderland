@@ -9,7 +9,7 @@ class UserController extends BaseController {
   async onboard() {
     const {
       ctx,
-      config: { pwdSalt, defaultAvatar },
+      config: { pwdSalt },
     } = this;
     const { username, password } = ctx.request.body;
     const existantUser = await ctx.model.User.findOne({ username }, [
@@ -34,7 +34,7 @@ class UserController extends BaseController {
         username,
         password: md5(password + pwdSalt),
       });
-      ctx.service.user.signToken({ _id: newUser._id, username, avatar: defaultAvatar });
+      ctx.service.user.signToken({ _id: newUser._id, username });
       this.success({ data: { message: '注册成功' } });
     }
   }

@@ -35,9 +35,9 @@ export default class App extends Vue {
     };
 
     this.isSubmiting = true;
-    await this.$axios.post('/private/article/publish', data);
+    const res = await this.$axios.post('/private/article/publish', data);
     this.isSubmiting = false;
-    // this.$router.push('/');
+    this.$router.push(`/note/view/${res?.data?.id}`);
   }
 }
 </script>

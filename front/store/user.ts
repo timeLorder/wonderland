@@ -1,5 +1,6 @@
 import { Module, VuexModule, VuexMutation, VuexAction } from 'nuxt-property-decorator';
 import { $axios } from '@/utils/axios-accessor';
+import { defaultAvatar } from '@/constants';
 
 @Module({
   name: 'user',
@@ -33,7 +34,7 @@ export default class UserModule extends VuexModule {
       if (res) {
         this.setIsLogin(res.isLogin);
         this.setUsername(res.username);
-        this.setAvatar(res.avatar);
+        this.setAvatar(res.avatar || defaultAvatar);
       }
     } catch (error) {
       // let it fails silently

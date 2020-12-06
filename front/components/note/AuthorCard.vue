@@ -1,19 +1,21 @@
 <template>
-  <a-card hoverable class="author-card">
-    <template slot="actions" class="ant-card-actions">
-      <a-icon key="setting" type="setting" />
-      <a-icon key="edit" type="edit" />
-      <a-icon key="ellipsis" type="ellipsis" />
+  <a-card hoverable class="author-card" :loading="loading">
+    <template v-if="!loading" slot="actions" class="ant-card-actions">
+      <a-button class="text-button" type="link" icon="star">关注</a-button>
+      <a-button class="text-button" type="link" icon="message" disabled>发消息</a-button>
     </template>
-    <a-avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+    <a-avatar :src="avatar" />
+    <b class="username">{{ author.username }}</b>
   </a-card>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'nuxt-property-decorator';
+import { defaultAvatar } from '@/constants';
 
 interface Userinfo {
-  name?: string;
+  _id?: string;
+  username?: string;
   avatar?: string;
   watched?: number;
   watchedBy?: number;
@@ -23,12 +25,20 @@ interface Userinfo {
 export default class App extends Vue {
   @Prop({ type: Boolean, default: false }) readonly loading!: boolean;
   @Prop({ type: Boolean, default: false }) readonly hasFollowed!: boolean;
-  @Prop({ type: Object, required: true }) readonly user!: Userinfo;
+  @Prop({ type: Object, default: () => ({}) }) readonly author!: Userinfo;
+
+  get avatar() {
+    return this.author.avatar || defaultAvatar;
+  }
 }
 </script>
 
 <style lang="less" scoped>
 .author-card {
   width: 100%;
+
+  .username {
+    margin-left: 10px;
+  }
 }
 </style>
