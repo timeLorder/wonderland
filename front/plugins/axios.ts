@@ -48,7 +48,7 @@ const axiosPlugin: Plugin = ({ $axios, redirect, store }) => {
           store.dispatch('common/openAuthModal');
         }
       } else {
-        if (!config.disableNotify) {
+        if (!config.disableNotify && !process.server) {
           notification.error({
             message: '错误',
             description: data.errorMessage || defaultMsg,

@@ -2,10 +2,10 @@
   <main class="note-view-wrapper">
     <a-row>
       <a-col :span="18">
-        <div class="article-container"></div>
+        <note-viewer v-if="showViewer" :article="article" />
       </a-col>
       <a-col :span="5" :offset="1">
-        <author-card user="x" />
+        <author-card :author="author" />
       </a-col>
     </a-row>
   </main>
@@ -13,10 +13,20 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
+import { Context } from '@nuxt/types';
 
 @Component
 export default class App extends Vue {
-  private isSubmiting = false;
+  showViewer = false;
+
+  async asyncData({ app, params }: Context) {
+    const { data } = await app.$axios.get(`/article/detail?id=${params.id}`);
+    return { article: data, author: data.author };
+  }
+
+  mounted() {
+    this.showViewer = true;
+  }
 }
 </script>
 
@@ -24,10 +34,5 @@ export default class App extends Vue {
 .note-view-wrapper {
   width: @index-width;
   margin: 40px auto;
-
-  .article-container {
-    width: 100%;
-    background: #fff;
-  }
 }
 </style>
