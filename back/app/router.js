@@ -10,6 +10,8 @@ module.exports = app => {
   router.post('/common/onboard', controller.user.onboard);
   router.put('/private/logout', controller.user.logout);
 
+  router.put('/private/switchFollow', controller.user.switchFollow);
+
   router.get('/article/detail', controller.article.detail);
   router.post('/private/article/publish', controller.article.publish);
   router.post('/private/article/save', controller.article.saveDraft);
