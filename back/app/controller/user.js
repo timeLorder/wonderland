@@ -77,6 +77,47 @@ class UserController extends BaseController {
       this.error();
     }
   }
+
+  // 切换关注
+  async switchFollow() {
+    const { ctx } = this;
+    const { _id: userId } = ctx.state.user;
+    const { type, targetId } = ctx.request.body;
+
+    const me = await ctx.model.User.findById(userId);
+    const target = await ctx.model.User.findById(targetId);
+
+    if (type === 'FOLLOW') {
+      // 关注
+      if (!me.following.includes(targetId)) {
+        me.following.push(targetId);
+        me.save();
+      }
+
+      if (!target.follower.includes(userId)) {
+        target.follower.push(userId);
+        target.save();
+      }
+
+      this.success({ data: { message: '关注成功' } });
+    }
+    if (type === 'UNFOLLOW') {
+      // 取关
+      let index = me.following.indexOf(targetId);
+      if (index > -1) {
+        me.following.splice(index, 1);
+        me.save();
+      }
+
+      index = target.follower.indexOf(userId);
+      if (index > -1) {
+        target.follower.splice(index, 1);
+        target.save();
+      }
+
+      this.success({ data: { message: '取消关注成功' } });
+    }
+  }
 }
 
 module.exports = UserController;
