@@ -33,13 +33,31 @@ class ArticleController extends BaseController {
 
   // 查询详情
   async detail() {
-    const { ctx } = this;
+    const {
+      app,
+      ctx,
+      config: {
+        jwtTokenKey,
+        jwt: { secret: jwtSecret },
+      },
+    } = this;
     const { id } = ctx.query;
     const info = await ctx.model.Article.findByIdAndUpdate(
       id,
       { $inc: { readTimes: 1 } },
       { useFindAndModify: false }
     ).populate('author', '-createdAt -updatedAt');
+
+    const token = ctx.cookies.get(jwtTokenKey);
+    try {
+      const { _id } = await app.jwt.verify(token, jwtSecret);
+      const user = await ctx.model.User.findById(_id);
+
+      info.author.isFollowed = user.following.includes(info.author._id);
+    } catch (error) {
+      info.author.isFollowed = false;
+    }
+
     this.success({ data: info });
   }
 }
