@@ -13,7 +13,9 @@
         </template>
       </a-input-search>
     </slot>
-    <slot name="right"><wd-auth /></slot>
+    <slot name="right">
+      <wd-auth />
+    </slot>
   </header>
 </template>
 

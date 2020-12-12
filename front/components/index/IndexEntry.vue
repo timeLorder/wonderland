@@ -1,7 +1,7 @@
 <template>
-  <div class="wd-entry" :class="entryClassnames" @click="jumpInto">
-    <img class="wd-entry-img" :src="entryBg" :alt="type" />
-    <div class="wd-entry-mask">{{ title }}</div>
+  <div class="entry-card" :class="entryClassnames" @click="jumpInto">
+    <img class="entry-img" :src="entryBg" :alt="type" />
+    <div class="entry-mask">{{ title }}</div>
   </div>
 </template>
 
@@ -48,52 +48,47 @@ export default class App extends Vue {
 }
 </script>
 
-<style lang="less">
-.wd-entry {
+<style lang="less" scoped>
+.entry-card {
   position: relative;
   overflow: hidden;
-  width: 500px;
-  height: 380px;
-  border-radius: 16px;
-  box-shadow: 0 3px 4px 0 rgba(44, 71, 146, 0.32), inset 0 -2px 0 0 #e1e3e8;
+  width: 100%;
+  height: 120px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.1);
   color: white;
   cursor: pointer;
 
-  &:first-child,
-  &:nth-child(2) {
-    margin-bottom: 40px;
-  }
-
-  .wd-entry-img {
+  .entry-img {
     width: 100%;
     height: 100%;
     max-width: 100%;
     max-height: 100%;
-    border-radius: 16px;
+    border-radius: 12px;
     transition: all 0.4s ease-out;
   }
 
-  .wd-entry-mask {
+  .entry-mask {
     position: absolute;
     top: 0;
     left: 0;
     background: black;
     opacity: 0;
-    border-radius: 16px;
-    width: 500px;
-    height: 380px;
-    line-height: 380px;
+    border-radius: 12px;
+    width: 100%;
+    height: 120px;
+    line-height: 120px;
     text-align: center;
-    font-size: 30px;
+    font-size: 20px;
     letter-spacing: 8px;
     transition: all 0.4s ease-out;
   }
 
   &:hover {
-    .wd-entry-img {
+    .entry-img {
       transform: scale(1.1, 1.1);
     }
-    .wd-entry-mask {
+    .entry-mask {
       opacity: 0.5;
     }
   }
