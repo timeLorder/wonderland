@@ -18,8 +18,8 @@
       <div class="hot-content">
         <hot-article
           v-for="item in hotList"
-          :key="item.id"
           :id="item.id"
+          :key="item.id"
           :title="item.title"
           :author="item.author"
           :update-at="item.updateAt"

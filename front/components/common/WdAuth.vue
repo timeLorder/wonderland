@@ -133,7 +133,7 @@ export default class App extends Vue {
 
     this.loading = true;
     try {
-      await this.$axios.post('/common/onboard', this.formData, { disableNotify: true });
+      await this.$axios.post('/user/onboard', this.formData, { disableNotify: true });
       this.loading = false;
       window.location.reload();
     } catch (error) {
