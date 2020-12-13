@@ -14,7 +14,7 @@ import { Vue, Component } from 'nuxt-property-decorator';
 import { userStore } from '@/store';
 
 @Component
-export default class Auth extends Vue {
+export default class App extends Vue {
   get username() {
     return userStore.username;
   }

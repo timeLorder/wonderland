@@ -19,7 +19,7 @@ export default class Error extends Vue {
     if (this.error.statusCode === 404) {
       return {
         status: '404',
-        title: '资源不存在',
+        title: '您要找的页面不见了',
         subTitle: '',
       };
     }
@@ -32,7 +32,7 @@ export default class Error extends Vue {
     }
     return {
       status: 'error',
-      title: this.error.message || '系统繁忙',
+      title: this.error.message || '系统异常',
       subTitle: '这可能不是您的原因造成的，请稍后重试',
     };
   }

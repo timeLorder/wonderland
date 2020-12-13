@@ -12,12 +12,17 @@ class UserController extends BaseController {
       config: { pwdSalt },
     } = this;
     const { username, password } = ctx.request.body;
-    const existantUser = await ctx.model.User.findOne({ username });
+    const existantUser = await ctx.model.User.findOne({ username }, [
+      '_id',
+      'username',
+      'password',
+      'avatar',
+    ]);
     if (existantUser) {
       // 用户名已存在 登录逻辑
       if (existantUser.password === md5(password + pwdSalt)) {
-        const { _id } = existantUser;
-        ctx.service.user.signToken({ _id });
+        const { _id, avatar } = existantUser;
+        ctx.service.user.signToken({ _id, username, avatar });
         this.success({ data: { message: '登录成功' } });
       } else {
         this.error({ error: ERRORS.PWD_ERROR });
@@ -29,7 +34,7 @@ class UserController extends BaseController {
         username,
         password: md5(password + pwdSalt),
       });
-      ctx.service.user.signToken({ _id: newUser._id });
+      ctx.service.user.signToken({ _id: newUser._id, username });
       this.success({ data: { message: '注册成功' } });
     }
   }
@@ -41,18 +46,16 @@ class UserController extends BaseController {
       ctx,
       config: {
         jwtTokenKey,
-        defaultAvatar,
         jwt: { secret: jwtSecret },
       },
     } = this;
     const token = ctx.cookies.get(jwtTokenKey);
 
     try {
-      const user = await app.jwt.verify(token, jwtSecret);
+      const { _id, username, avatar } = await app.jwt.verify(token, jwtSecret);
       // 用户已登录
-      // 查询头像或其他基本信息后返回
-      const { username, avatar = defaultAvatar } = await ctx.model.User.findById(user._id);
-      this.success({ data: { isLogin: true, username, avatar } });
+      // 从Token中获取头像和其他基本信息后返回
+      this.success({ data: { isLogin: true, username, avatar, userid: _id } });
     } catch (error) {
       // 令牌校验失败 返回未登录
       this.success({ data: { isLogin: false } });
@@ -67,10 +70,52 @@ class UserController extends BaseController {
     } = this;
 
     try {
+      // to do 撤销token有效性
       ctx.cookies.set(jwtTokenKey, null, { maxAge: 0 });
       this.success();
     } catch (error) {
       this.error();
+    }
+  }
+
+  // 切换关注
+  async switchFollow() {
+    const { ctx } = this;
+    const { _id: userId } = ctx.state.user;
+    const { type, targetId } = ctx.request.body;
+
+    const me = await ctx.model.User.findById(userId);
+    const target = await ctx.model.User.findById(targetId);
+
+    if (type === 'FOLLOW') {
+      // 关注
+      if (!me.following.includes(targetId)) {
+        me.following.push(targetId);
+        me.save();
+      }
+
+      if (!target.follower.includes(userId)) {
+        target.follower.push(userId);
+        target.save();
+      }
+
+      this.success({ data: { message: '关注成功' } });
+    }
+    if (type === 'UNFOLLOW') {
+      // 取关
+      let index = me.following.indexOf(targetId);
+      if (index > -1) {
+        me.following.splice(index, 1);
+        me.save();
+      }
+
+      index = target.follower.indexOf(userId);
+      if (index > -1) {
+        target.follower.splice(index, 1);
+        target.save();
+      }
+
+      this.success({ data: { message: '取消关注成功' } });
     }
   }
 }
