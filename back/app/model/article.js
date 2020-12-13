@@ -13,6 +13,7 @@ module.exports = app => {
       content: { type: String, required: true },
       author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
       readTimes: { type: Number, required: false, default: 0 },
+      isPublic: { type: Boolean, required: true },
     },
     { timestamps: true }
   );

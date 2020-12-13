@@ -6,7 +6,7 @@
         <p v-if="desc" class="desc">{{ desc }}</p>
         <div class="info-row">
           <div>
-            <a-avatar :src="author.avatar" size="small" />
+            <a-avatar :src="avatar" size="small" />
             <span class="username">{{ author.username }}</span>
           </div>
           <div class="fromNow">4小时前</div>
@@ -19,15 +19,26 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'nuxt-property-decorator';
+import { defaultAvatar } from '@/constants';
+
+interface Authorinfo {
+  _id?: string;
+  username?: string;
+  avatar?: string;
+}
 
 @Component
 export default class App extends Vue {
   @Prop({ type: String, required: true }) readonly id!: string;
-  @Prop({ type: Object, default: () => ({}) }) readonly author!: object;
+  @Prop({ type: Object, default: () => ({}) }) readonly author!: Authorinfo;
   @Prop({ type: String, required: true }) readonly title!: string;
   @Prop({ type: String, default: '' }) readonly desc!: string;
   @Prop({ type: String, default: '' }) readonly cover!: string;
-  @Prop({ type: String, required: true }) readonly updateAt!: string;
+  @Prop({ type: String, required: true }) readonly updatedAt!: string;
+
+  get avatar() {
+    return this.author.avatar || defaultAvatar;
+  }
 
   jumpInto() {
     this.$router.push(`/note/view/${this.id}`);
@@ -38,14 +49,9 @@ export default class App extends Vue {
 <style lang="less" scoped>
 .article-card {
   position: relative;
-  border-bottom: 1px solid #f0f0f0;
   padding: 16px 20px;
   width: 100%;
   cursor: pointer;
-
-  &:last-of-type {
-    border-bottom: none;
-  }
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.01);

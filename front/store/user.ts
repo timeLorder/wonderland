@@ -9,12 +9,18 @@ import { defaultAvatar } from '@/constants';
 })
 export default class UserModule extends VuexModule {
   isLogin = false;
+  userid = '';
   username = '';
   avatar = '';
 
   @VuexMutation
   setIsLogin(v: boolean) {
     this.isLogin = v;
+  }
+
+  @VuexMutation
+  setUserid(id: string) {
+    this.userid = id;
   }
 
   @VuexMutation
@@ -33,6 +39,7 @@ export default class UserModule extends VuexModule {
       const res = await $axios.$get('/user/status', { disableNotify: true });
       if (res) {
         this.setIsLogin(res.isLogin);
+        this.setUserid(res.userid);
         this.setUsername(res.username);
         this.setAvatar(res.avatar || defaultAvatar);
       }
@@ -46,6 +53,7 @@ export default class UserModule extends VuexModule {
     try {
       await $axios.$post('/user/logout');
       this.setIsLogin(false);
+      this.setUserid('');
       this.setUsername('');
       this.setAvatar('');
       window.location.reload();

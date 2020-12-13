@@ -52,10 +52,10 @@ class UserController extends BaseController {
     const token = ctx.cookies.get(jwtTokenKey);
 
     try {
-      const { username, avatar } = await app.jwt.verify(token, jwtSecret);
+      const { _id, username, avatar } = await app.jwt.verify(token, jwtSecret);
       // 用户已登录
       // 从Token中获取头像和其他基本信息后返回
-      this.success({ data: { isLogin: true, username, avatar } });
+      this.success({ data: { isLogin: true, username, avatar, userid: _id } });
     } catch (error) {
       // 令牌校验失败 返回未登录
       this.success({ data: { isLogin: false } });
