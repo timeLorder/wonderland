@@ -5,7 +5,7 @@
         <note-viewer v-if="showViewer" :article="article" />
       </a-col>
       <a-col :span="5" :offset="1">
-        <author-card :author="author" />
+        <author-card :author="article.author" />
       </a-col>
     </a-row>
   </main>
@@ -20,8 +20,12 @@ export default class App extends Vue {
   showViewer = false;
 
   async asyncData({ app, params }: Context) {
-    const { data } = await app.$axios.get(`/article/detail?id=${params.id}`);
-    return { article: data, author: data.author };
+    try {
+      const { data } = await app.$axios.get(`/article/detail?id=${params.id}`);
+      return { article: data };
+    } catch (error) {
+      return { article: {} };
+    }
   }
 
   mounted() {

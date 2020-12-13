@@ -30,7 +30,7 @@ export default class UserModule extends VuexModule {
   @VuexAction
   async getStatus() {
     try {
-      const res = await $axios.$get('/common/status', { disableNotify: true });
+      const res = await $axios.$get('/user/status', { disableNotify: true });
       if (res) {
         this.setIsLogin(res.isLogin);
         this.setUsername(res.username);
@@ -44,7 +44,7 @@ export default class UserModule extends VuexModule {
   @VuexAction
   async logout() {
     try {
-      await $axios.$put('/private/logout');
+      await $axios.$post('/user/logout');
       this.setIsLogin(false);
       this.setUsername('');
       this.setAvatar('');
