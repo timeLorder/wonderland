@@ -19,7 +19,7 @@ class ArticleController extends BaseController {
   // 发布
   async publish() {
     const { ctx } = this;
-    const { title, cover, html, md } = ctx.request.body;
+    const { title, cover, html, md, isPublic } = ctx.request.body;
     const { _id } = ctx.state.user;
     const { _id: articleId } = await ctx.model.Article.create({
       title,
@@ -27,6 +27,7 @@ class ArticleController extends BaseController {
       _content: md,
       content: html,
       author: _id,
+      isPublic,
     });
     this.success({ data: { id: articleId, message: '发布成功' } });
   }
@@ -42,28 +43,67 @@ class ArticleController extends BaseController {
       },
     } = this;
     const { id } = ctx.query;
-    const info = await ctx.model.Article.findByIdAndUpdate(
+    const {
+      _id: articleId,
+      author,
+      title,
+      content,
+      cover,
+      isPublic,
+      readTimes,
+      updatedAt,
+    } = await ctx.model.Article.findByIdAndUpdate(
       id,
       { $inc: { readTimes: 1 } },
       { useFindAndModify: false }
-    ).populate('author', '-createdAt -updatedAt');
+    ).populate('author', '_id username avatar');
 
     const token = ctx.cookies.get(jwtTokenKey);
+    const { _id: authorId, username, avatar } = author;
+    let hasFollowed;
     try {
       const { _id } = await app.jwt.verify(token, jwtSecret);
       const user = await ctx.model.User.findById(_id);
 
-      info.author.isFollowed = user.following.includes(info.author._id);
+      hasFollowed = user.following.includes(authorId);
     } catch (error) {
-      info.author.isFollowed = false;
+      hasFollowed = false;
     }
 
-    this.success({ data: info });
+    this.success({
+      data: {
+        articleId,
+        title,
+        content,
+        cover,
+        isPublic,
+        readTimes,
+        updatedAt,
+        author: { authorId, username, avatar, hasFollowed },
+      },
+    });
   }
 
   // 查询热点文章列表
   async getHotList() {
-    this.success({ data: {} });
+    const { ctx } = this;
+    let { current = 1, pageSize = 10, landTime } = ctx.query;
+
+    current = parseInt(current);
+    pageSize = parseInt(pageSize);
+    landTime = parseInt(landTime);
+
+    const oneWeekAgo = landTime - 7 * 24 * 3600 * 1000;
+    const list = await ctx.model.Article.find({
+      isPublic: true,
+      updatedAt: { $gt: oneWeekAgo },
+    })
+      .populate('author', '_id username avatar')
+      .sort('-readTimes')
+      .skip((current - 1) * pageSize)
+      .limit(pageSize);
+
+    this.success({ data: { list } });
   }
 }
 
