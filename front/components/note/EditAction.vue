@@ -33,6 +33,9 @@
             </p>
           </a-upload-dragger>
         </a-form-model-item>
+        <a-form-model-item prop="isPublic" label="公开">
+          <a-switch v-model="formData.isPublic" checked-children="是" un-checked-children="否" />
+        </a-form-model-item>
       </a-form-model>
       <template #footer>
         <a-button type="primary" size="large" block :loading="isSubmiting" @click="handleConfirm">
@@ -58,6 +61,7 @@ export default class App extends Vue {
   formData = {
     title: '',
     cover: '', // todo 接入oss上传
+    isPublic: true,
   };
 
   formRules = {

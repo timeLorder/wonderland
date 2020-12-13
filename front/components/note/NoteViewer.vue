@@ -2,7 +2,11 @@
   <div class="article-container">
     <a-skeleton v-if="loading" active />
     <template v-show="!loading">
-      <h2>{{ article.title }}</h2>
+      <h2 class="article-title">{{ article.title }}</h2>
+      <div class="article-info">
+        <span>最后更新于 {{ updateTime }}</span>
+        <span>阅读量 {{ article.readTimes }}</span>
+      </div>
       <tui-viewer :initial-value="article.content" height="auto" @load="handleLoad" />
     </template>
   </div>
@@ -11,9 +15,10 @@
 <script lang="ts">
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Vue, Component, Prop } from 'nuxt-property-decorator';
+import dayjs from 'dayjs';
 
 interface ArticleType {
-  _id?: string;
+  articleId?: string;
   title?: string;
   cover?: string;
   content?: string;
@@ -31,6 +36,10 @@ export default class App extends Vue {
 
   loading = true;
 
+  get updateTime() {
+    return dayjs(this.article.updatedAt).format('YYYY-MM-DD');
+  }
+
   handleLoad() {
     this.loading = false;
   }
@@ -39,7 +48,25 @@ export default class App extends Vue {
 
 <style lang="less" scoped>
 .article-container {
+  padding: 24px;
   width: 100%;
   background: #fff;
+}
+.article-title {
+  font-size: 28px;
+  color: #222;
+  margin-bottom: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.article-info {
+  margin-bottom: 30px;
+  color: #9b9b9b;
+  font-size: 12px;
+  font-weight: 400;
+
+  & > span {
+    margin-right: 12px;
+  }
 }
 </style>

@@ -19,7 +19,11 @@ export default {
   },
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: ['@/plugins/antd-ui', '@/plugins/axios'],
+  plugins: [
+    '@/plugins/antd-ui',
+    '@/plugins/axios',
+    { src: '@/plugins/infinite-scroll', ssr: false },
+  ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
