@@ -60,6 +60,11 @@ class ArticleController extends BaseController {
 
     this.success({ data: info });
   }
+
+  // 查询热点文章列表
+  async getHotList() {
+    this.success({ data: {} });
+  }
 }
 
 module.exports = ArticleController;
