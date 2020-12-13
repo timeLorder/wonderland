@@ -7,6 +7,7 @@
 }
 
 body {
+  background: @neumorphism-bg;
   font-family: roboto, PingFang SC, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif,
     Apple Color Emoji, Segeo UI Emoji, Segeo UI Symbol;
@@ -66,4 +67,12 @@ button.active-button {
       color: #fff;
     }
   }
+}
+
+button.text-button {
+  border: none;
+  padding: 0;
+  height: 1em;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.65);
 }

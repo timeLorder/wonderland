@@ -1,5 +1,6 @@
 import { Module, VuexModule, VuexMutation, VuexAction } from 'nuxt-property-decorator';
 import { $axios } from '@/utils/axios-accessor';
+import { defaultAvatar } from '@/constants';
 
 @Module({
   name: 'user',
@@ -8,12 +9,18 @@ import { $axios } from '@/utils/axios-accessor';
 })
 export default class UserModule extends VuexModule {
   isLogin = false;
+  userid = '';
   username = '';
   avatar = '';
 
   @VuexMutation
   setIsLogin(v: boolean) {
     this.isLogin = v;
+  }
+
+  @VuexMutation
+  setUserid(id: string) {
+    this.userid = id;
   }
 
   @VuexMutation
@@ -29,11 +36,12 @@ export default class UserModule extends VuexModule {
   @VuexAction
   async getStatus() {
     try {
-      const res = await $axios.$get('/common/status', { disableNotify: true });
+      const res = await $axios.$get('/user/status', { disableNotify: true });
       if (res) {
         this.setIsLogin(res.isLogin);
+        this.setUserid(res.userid);
         this.setUsername(res.username);
-        this.setAvatar(res.avatar);
+        this.setAvatar(res.avatar || defaultAvatar);
       }
     } catch (error) {
       // let it fails silently
@@ -43,8 +51,9 @@ export default class UserModule extends VuexModule {
   @VuexAction
   async logout() {
     try {
-      await $axios.$put('/private/logout');
+      await $axios.$post('/user/logout');
       this.setIsLogin(false);
+      this.setUserid('');
       this.setUsername('');
       this.setAvatar('');
       window.location.reload();
