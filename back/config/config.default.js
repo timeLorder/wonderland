@@ -2,6 +2,7 @@
 
 'use strict';
 
+const secrets = require('../secret.json');
 const onerror = require('../app/handler/error');
 
 /**
@@ -15,7 +16,7 @@ module.exports = appInfo => {
   const config = (exports = {});
 
   // use for cookie sign key, should change to your own and keep security
-  config.keys = appInfo.name + '_1603016730774_9059';
+  config.keys = secrets.cookieKey || appInfo.name + '_1603016730774_9059';
 
   // add your middleware config here
   config.middleware = [];
@@ -23,8 +24,15 @@ module.exports = appInfo => {
   // add your user config here
   const userConfig = {
     // use for password encryption, should change to your own and keep security
-    pwdSalt: 'pwdSalt',
+    pwdSalt: secrets.pwdSalt || 'pwdSalt',
     jwtTokenKey: 'x-wd-token',
+    ossConfig: {
+      bucket: secrets.OSSBucket || 'bucket',
+      endpoint: secrets.OSSEndpoint || 'endpoint',
+      accessKeyId: secrets.accessKeyId || 'accessKeyId',
+      accessKeySecret: secrets.accessKeySecret || 'accessKeySecret',
+      roleArn: secrets.roleArn || 'roleArn',
+    },
   };
 
   // 前后端分离时一般使用CORS校验Origin，此时可以关闭CSRF
@@ -34,13 +42,13 @@ module.exports = appInfo => {
     },
   };
 
-  // mongodb
+  // mongodb config, should change to your own and keep security
   const mongoose = {
     client: {
       url: 'mongodb://127.0.0.1:27017/wonderland',
       options: {
-        user: 'wd-admin',
-        pass: 'xgp-gog',
+        user: secrets.dbUser || 'username',
+        pass: secrets.dbPass || 'password',
       },
     },
   };
@@ -48,7 +56,8 @@ module.exports = appInfo => {
   // jwt
   const jwt = {
     enable: true,
-    secret: 'jwtSecret',
+    // use for token encryption, should change to your own and keep security
+    secret: secrets.jwtSecret || 'jwtSecret',
     match: '/private',
     getToken(ctx) {
       return ctx.cookies.get(userConfig.jwtTokenKey) || null;
