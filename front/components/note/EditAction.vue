@@ -22,15 +22,25 @@
           />
         </a-form-model-item>
         <a-form-model-item prop="cover" label="封面">
-          <a-upload-dragger name="file" action="https://www.mocky.io/v2/5cc8019d300000980a055e76">
-            <p class="ant-upload-drag-icon">
-              <a-icon type="inbox" />
-            </p>
-            <p class="ant-upload-text">Click or drag file to this area to upload</p>
-            <p class="ant-upload-hint">
-              Support for a single or bulk upload. Strictly prohibit from uploading company data or
-              other band files
-            </p>
+          <a-upload-dragger
+            :disabled="isUploading"
+            :show-upload-list="false"
+            :custom-request="upload"
+          >
+            <a-icon v-if="isUploading" type="loading" />
+            <img
+              v-else-if="formData.cover"
+              class="ant-upload-img"
+              :src="formData.cover"
+              alt="封面"
+            />
+            <template v-else>
+              <p class="ant-upload-drag-icon">
+                <a-icon type="inbox" />
+              </p>
+              <p class="ant-upload-text">点击或拖动文件至此以进行上传</p>
+              <p class="ant-upload-hint">图片类型可以为 JPG 或 PNG，文件大小应不大于10MB。</p>
+            </template>
           </a-upload-dragger>
         </a-form-model-item>
         <a-form-model-item prop="isPublic" label="公开">
@@ -49,6 +59,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator';
 import { FormModel } from 'ant-design-vue/types/form-model/form';
+import { ossStore } from '@/store';
 
 @Component
 export default class App extends Vue {
@@ -57,6 +68,7 @@ export default class App extends Vue {
   @Ref('wd-edit-confirm-form') readonly form!: FormModel;
 
   private visible = false;
+  private isUploading = false;
 
   formData = {
     title: '',
@@ -73,6 +85,14 @@ export default class App extends Vue {
 
   handlePublish() {
     this.visible = true;
+  }
+
+  async upload({ file }: { file: File }) {
+    this.isUploading = true;
+
+    const res = await ossStore.uploadOSS({ directory: 'cover', file });
+    this.formData.cover = res?.url || '';
+    this.isUploading = false;
   }
 
   async handleConfirm() {
@@ -100,6 +120,14 @@ export default class App extends Vue {
         border-radius: 0 0 3px 3px;
         height: 56px;
       }
+    }
+  }
+
+  .ant-upload-drag-container {
+    height: 120px;
+
+    .ant-upload-img {
+      max-height: 120px;
     }
   }
 }
