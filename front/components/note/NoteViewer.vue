@@ -2,6 +2,9 @@
   <div class="article-container">
     <a-skeleton v-if="loading" active />
     <template v-show="!loading">
+      <div class="article-cover-container">
+        <img v-if="article.cover" class="article-cover" :src="article.cover" alt="封面" />
+      </div>
       <h2 class="article-title">{{ article.title }}</h2>
       <div class="article-info">
         <span>最后更新于 {{ updateTime }}</span>
@@ -48,9 +51,17 @@ export default class App extends Vue {
 
 <style lang="less" scoped>
 .article-container {
-  padding: 24px;
+  padding: 32px;
   width: 100%;
   background: #fff;
+}
+.article-cover-container {
+  margin-bottom: 32px;
+  width: 100%;
+  text-align: center;
+}
+.article-cover {
+  max-width: 762px;
 }
 .article-title {
   font-size: 28px;

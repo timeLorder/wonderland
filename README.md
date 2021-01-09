@@ -54,3 +54,5 @@ npm run dev
 # visit http://localhost:3000/ to see the website !
 
 ```
+
+> `\back\secret.tpl` is a template file of `secret.json` where you manage all secret info and keys. You should rename it and change the content to your own.

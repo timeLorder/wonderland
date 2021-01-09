@@ -22,15 +22,29 @@
           />
         </a-form-model-item>
         <a-form-model-item prop="cover" label="封面">
-          <a-upload-dragger name="file" action="https://www.mocky.io/v2/5cc8019d300000980a055e76">
-            <p class="ant-upload-drag-icon">
-              <a-icon type="inbox" />
-            </p>
-            <p class="ant-upload-text">Click or drag file to this area to upload</p>
-            <p class="ant-upload-hint">
-              Support for a single or bulk upload. Strictly prohibit from uploading company data or
-              other band files
-            </p>
+          <a-upload-dragger
+            :class="uploaderClass"
+            :disabled="isUploading"
+            :show-upload-list="false"
+            :custom-request="upload"
+          >
+            <a-icon v-if="isUploading" class="upload-loading" type="loading" />
+            <div v-else-if="formData.cover">
+              <img class="upload-img" :src="formData.cover" alt="封面" />
+              <div class="upload-right-top-corner" title="预览">
+                <a-icon class="upload-preview" type="zoom-in" />
+              </div>
+              <div class="upload-right-bottom-corner" title="删除" @click="clearUpload">
+                <a-icon class="upload-delete" type="delete" />
+              </div>
+            </div>
+            <template v-else>
+              <p class="ant-upload-drag-icon">
+                <a-icon type="inbox" />
+              </p>
+              <p class="ant-upload-text">点击或拖动文件至此以进行上传</p>
+              <p class="ant-upload-hint">图片类型可以为 JPG 或 PNG，文件大小应不大于10MB。</p>
+            </template>
           </a-upload-dragger>
         </a-form-model-item>
         <a-form-model-item prop="isPublic" label="公开">
@@ -49,6 +63,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator';
 import { FormModel } from 'ant-design-vue/types/form-model/form';
+import { ossStore } from '@/store';
 
 @Component
 export default class App extends Vue {
@@ -57,10 +72,11 @@ export default class App extends Vue {
   @Ref('wd-edit-confirm-form') readonly form!: FormModel;
 
   private visible = false;
+  private isUploading = false;
 
   formData = {
     title: '',
-    cover: '', // todo 接入oss上传
+    cover: '',
     isPublic: true,
   };
 
@@ -71,8 +87,27 @@ export default class App extends Vue {
     ],
   };
 
+  get uploaderClass() {
+    return {
+      'upload-result-container': !!this.formData.cover,
+    };
+  }
+
   handlePublish() {
     this.visible = true;
+  }
+
+  clearUpload(e: MouseEvent) {
+    e.stopPropagation();
+    this.formData.cover = '';
+  }
+
+  async upload({ file }: { file: File }) {
+    this.isUploading = true;
+
+    const res = await ossStore.uploadOSS({ directory: 'cover', file });
+    this.formData.cover = res?.url || '';
+    this.isUploading = false;
   }
 
   async handleConfirm() {
@@ -100,6 +135,58 @@ export default class App extends Vue {
         border-radius: 0 0 3px 3px;
         height: 56px;
       }
+    }
+  }
+
+  .upload-result-container .ant-upload.ant-upload-btn {
+    padding: 1px 0;
+  }
+
+  .upload-loading {
+    font-size: 32px;
+  }
+
+  .upload-img {
+    max-height: 146.8px;
+  }
+
+  .upload-right-top-corner,
+  .upload-right-bottom-corner {
+    position: absolute;
+    right: -1px;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .upload-right-top-corner {
+    top: -1px;
+    border-radius: 0 4px 0 30px;
+  }
+
+  .upload-right-bottom-corner {
+    bottom: -1px;
+    border-radius: 30px 0 4px 0;
+  }
+
+  .upload-preview {
+    top: 4px;
+  }
+
+  .upload-delete {
+    bottom: 4px;
+  }
+
+  .upload-preview,
+  .upload-delete {
+    position: absolute;
+    right: 4px;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.85);
+    transition: all 0.3s;
+
+    &:hover {
+      color: #fff;
     }
   }
 }
