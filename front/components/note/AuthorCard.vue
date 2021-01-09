@@ -42,7 +42,7 @@ export default class App extends Vue {
 
   async follow() {
     try {
-      await this.$axios.put('/user/switchFollow', {
+      await this.$axios.patch('/user/switchFollow', {
         type: 'FOLLOW',
         targetId: this.author.authorId,
       });
@@ -52,7 +52,7 @@ export default class App extends Vue {
 
   async unfollow() {
     try {
-      await this.$axios.put('/user/switchFollow', {
+      await this.$axios.patch('/user/switchFollow', {
         type: 'UNFOLLOW',
         targetId: this.author.authorId,
       });
