@@ -38,7 +38,7 @@ class OSSController extends BaseController {
     };
 
     const response = await this.client.request('AssumeRole', params, requestOption);
-    const { AccessKeyId, AccessKeySecret, SecurityToken } = response.Credentials || {};
+    const { AccessKeyId, AccessKeySecret, SecurityToken, Expiration } = response.Credentials || {};
     this.success({
       data: {
         bucket,
@@ -46,6 +46,7 @@ class OSSController extends BaseController {
         accessKeyId: AccessKeyId,
         accessKeySecret: AccessKeySecret,
         stsToken: SecurityToken,
+        expire: Expiration,
       },
     });
   }

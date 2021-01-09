@@ -9,6 +9,7 @@ interface OssConfigType {
   accessKeyId: string;
   accessKeySecret: string;
   stsToken: string;
+  expire: string;
 }
 
 @Module({
@@ -23,22 +24,27 @@ export default class OssModule extends VuexModule {
     accessKeyId: '',
     accessKeySecret: '',
     stsToken: '',
+    expire: '',
   };
 
   @VuexMutation
-  setConfig({ bucket, endpoint, accessKeyId, accessKeySecret, stsToken }: OssConfigType) {
+  setConfig({ bucket, endpoint, accessKeyId, accessKeySecret, stsToken, expire }: OssConfigType) {
     this.config = {
       bucket,
       endpoint,
       accessKeyId,
       accessKeySecret,
       stsToken,
+      expire,
     };
   }
 
   @VuexAction
   async getConfig() {
-    if (Object.values(this.config).some(v => !v)) {
+    // 距离 token 过期时间不到1分钟就认为需要更新 token
+    const isValid =
+      this.config.expire && new Date(this.config.expire).getTime() - Date.now() > 60 * 1000;
+    if (Object.values(this.config).some(v => !v) || !isValid) {
       const config = await $axios.$get('/oss/config');
       this.setConfig(config);
       return config;
@@ -61,7 +67,7 @@ export default class OssModule extends VuexModule {
         url: res.url,
       };
     } catch (error) {
-      // let it fails silently
+      // TODO add error monitor
     }
   }
 }
