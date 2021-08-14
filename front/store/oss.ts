@@ -46,7 +46,7 @@ export default class OssModule extends VuexModule {
       this.config.expire && new Date(this.config.expire).getTime() - Date.now() > 60 * 1000;
     if (Object.values(this.config).some(v => !v) || !isValid) {
       const config = await $axios.$get('/oss/config');
-      this.setConfig(config);
+      this.setConfig(config.data);
       return config;
     } else {
       return this.config;

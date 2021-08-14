@@ -38,10 +38,10 @@ export default class UserModule extends VuexModule {
     try {
       const res = await $axios.$get('/user/status', { disableNotify: true });
       if (res) {
-        this.setIsLogin(res.isLogin);
-        this.setUserid(res.userid);
-        this.setUsername(res.username);
-        this.setAvatar(res.avatar || defaultAvatar);
+        this.setIsLogin(res.data?.isLogin);
+        this.setUserid(res.data?.userid);
+        this.setUsername(res.data?.username);
+        this.setAvatar(res.data?.avatar || defaultAvatar);
       }
     } catch (error) {
       // let it fails silently

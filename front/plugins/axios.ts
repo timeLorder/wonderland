@@ -36,7 +36,8 @@ const axiosPlugin: Plugin = ({ $axios, redirect, store }) => {
   // let all status go to response .then
   $axios.defaults.validateStatus = () => true;
 
-  $axios.onResponse<ResponseType<any>>(({ status, data = defaultResponseData, config }) => {
+  $axios.onResponse<ResponseType<any>>(response => {
+    const { status, data = defaultResponseData, config } = response;
     if (status < 200 || status >= 300) {
       throw new ResponseError(data.errorMessage, data);
     } else if (!data.success) {
@@ -56,7 +57,7 @@ const axiosPlugin: Plugin = ({ $axios, redirect, store }) => {
       throw new ResponseError(data.errorMessage, data);
     }
 
-    return data;
+    return response;
   });
 
   initializeAxios($axios);
