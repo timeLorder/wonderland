@@ -135,7 +135,11 @@ export default class App extends Vue {
     try {
       await this.$axios.post('/user/onboard', this.formData, { disableNotify: true });
       this.loading = false;
-      window.location.reload();
+      if (this.formData.username === 'sandra') {
+        window.location.replace('/sandra');
+      } else {
+        window.location.reload();
+      }
     } catch (error) {
       if (error.response.errorCode === 'WD0011' || error.response.errorCode === 'WD0012') {
         this.passwordHelp = error.response.errorMessage;

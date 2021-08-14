@@ -23,6 +23,7 @@ export default {
     '@/plugins/antd-ui',
     '@/plugins/axios',
     { src: '@/plugins/infinite-scroll', ssr: false },
+    { src: '@/plugins/waterfall', ssr: false },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)

@@ -1,6 +1,6 @@
 import { Middleware } from '@nuxt/types';
 
-const privateRoutes = ['/note/edit'];
+const privateRoutes = ['/note/edit', '/sandra'];
 
 const authMiddleware: Middleware = context => {
   const { store, route, redirect, from } = context;
