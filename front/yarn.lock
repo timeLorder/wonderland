@@ -10466,6 +10466,11 @@ regenerator-runtime@^0.11.0:
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
   integrity sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
 
+regenerator-runtime@^0.13.1:
+  version "0.13.9"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.9.tgz#8925742a98ffd90814988d7566ad30ca3b263b52"
+  integrity sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==
+
 regenerator-runtime@^0.13.4:
   version "0.13.7"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.7.tgz#cac2dacc8a1ea675feaabaeb8ae833898ae46f55"
@@ -10868,6 +10873,11 @@ schema-utils@^3.0.0:
     "@types/json-schema" "^7.0.6"
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
+
+scroll-out@^2.2.12:
+  version "2.2.12"
+  resolved "https://registry.yarnpkg.com/scroll-out/-/scroll-out-2.2.12.tgz#6b092e24fd726e73b81cd10519b4769d648c07b6"
+  integrity sha512-BPWQJat8mmcjQCq+l4DsibBopkmQQb5ngPJ6T9XRxRl86/LJo7V+0d3Sjd9fxzIJkZmkjoGxEAam+Urvem8VRw==
 
 sdk-base@^2.0.1:
   version "2.0.1"
@@ -12584,6 +12594,14 @@ vue-template-es2015-compiler@^1.6.0, vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
+
+vue-waterfall2@^1.10.1:
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/vue-waterfall2/-/vue-waterfall2-1.10.1.tgz#c8fdcbf77f56d44bd1e5bad4a551960e6a22eff8"
+  integrity sha512-qVHuGMjU7440n0kUHxouSJGuhlFCi4EcA4UhwF3GPxLsWgZxAeE803m+HYssMuhO9Nma222TFhEqwXslhrg2tg==
+  dependencies:
+    babel-runtime "^6.26.0"
+    regenerator-runtime "^0.13.1"
 
 vue@^2.6.12:
   version "2.6.12"

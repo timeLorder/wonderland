@@ -1,0 +1,11 @@
+.slide-queue-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-queue-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-queue-enter, .slide-queue-leave-to
+/* .slide-queue-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}

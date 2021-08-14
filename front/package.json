@@ -22,7 +22,9 @@
     "dayjs": "^1.9.7",
     "nuxt": "^2.14.6",
     "nuxt-property-decorator": "^2.8.8",
-    "vue-infinite-scroll": "^2.0.2"
+    "scroll-out": "^2.2.12",
+    "vue-infinite-scroll": "^2.0.2",
+    "vue-waterfall2": "^1.10.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
