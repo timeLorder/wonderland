@@ -50,7 +50,7 @@ export default {
 
   axios: {
     proxy: true,
-    prefix: process.env.NODE_ENV === 'development' ? '/api' : '',
+    prefix: '/api',
   },
 
   proxy: {
